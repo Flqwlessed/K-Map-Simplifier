@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>K-Map Boolean Simplifier — Visualize, Group, Simplify</title>
+    <meta
+      name="description"
+      content="Interactive Karnaugh map simplifier for 2, 3 and 4 variables with grouping visualisation, step-by-step explanations, SOP/POS output and practice mode."
+    />
+    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <img src="assets/icons/logo.svg" alt="" width="42" height="42" />
+        <div>
+          <h1>K-Map Boolean Simplifier</h1>
+          <p class="tagline">Turn complex Boolean logic into simple equations, visually.</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn ghost" id="btn-example" type="button">Try an example</button>
+        <button class="btn ghost" id="btn-reset" type="button">Clear map</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- ============ INPUT CARD ============ -->
+      <section class="card" aria-label="Function input">
+        <div class="card-head">
+          <h2>Function setup</h2>
+          <span class="fn-signature" id="fn-signature">F(A,B,C,D)</span>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Variables</label>
+            <div class="segmented" id="var-select" role="tablist">
+              <button class="seg" data-vars="2" type="button">2 variables</button>
+              <button class="seg" data-vars="3" type="button">3 variables</button>
+              <button class="seg is-active" data-vars="4" type="button">4 variables</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Form</label>
+            <div class="segmented" id="form-select">
+              <button class="seg is-active" data-form="SOP" type="button">SOP (group 1s)</button>
+              <button class="seg" data-form="POS" type="button">POS (group 0s)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="segmented tabs" id="mode-tabs">
+          <button class="seg is-active" data-mode="minterms" type="button">Minterms</button>
+          <button class="seg" data-mode="truth" type="button">Truth table</button>
+          <button class="seg" data-mode="expression" type="button">Expression</button>
+        </div>
+
+        <div class="panel" data-panel="minterms">
+          <div class="row">
+            <div class="field">
+              <label for="input-minterms">Minterms (Σm)</label>
+              <input id="input-minterms" type="text" placeholder="Σm(0,2,5,7,8,10,13,15) or 0,2,5,7" autocomplete="off" />
+            </div>
+            <div class="field">
+              <label for="input-dontcares">Don't cares (d)</label>
+              <input id="input-dontcares" type="text" placeholder="d(1,3,9) or 1,3,9" autocomplete="off" />
+            </div>
+          </div>
+        </div>
+
+        <div class="panel is-hidden" data-panel="truth">
+          <p class="hint">Click any output cell to cycle 0 → 1 → X (don't care). The map updates instantly.</p>
+          <div class="truth-wrap" id="truth-table"></div>
+        </div>
+
+        <div class="panel is-hidden" data-panel="expression">
+          <div class="field">
+            <label for="input-expression">Boolean expression</label>
+            <input id="input-expression" type="text" placeholder="A'B + AC   ·   A&amp;B | !C   ·   (A + B')C" autocomplete="off" />
+            <p class="hint">
+              <code>'</code> or <code>!</code> = NOT · <code>+</code> or <code>|</code> = OR ·
+              <code>*</code>/<code>&amp;</code>/adjacency = AND · parentheses supported
+            </p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" id="btn-generate" type="button">Generate &amp; simplify</button>
+          <button class="btn ghost" id="btn-skip" type="button">Skip animation</button>
+          <button class="btn ghost toggle" id="btn-manual" type="button">Manual mode: off</button>
+        </div>
+      </section>
+
+      <!-- ============ K-MAP ============ -->
+      <section class="card" aria-label="Karnaugh map">
+        <div class="card-head">
+          <h2>Karnaugh map</h2>
+          <span class="muted" id="kmap-caption">Gray-code ordering</span>
+        </div>
+        <div id="manual-bar" class="manual-bar is-hidden">
+          <span id="manual-status">Select cells to test your own group.</span>
+          <span class="spacer"></span>
+          <button class="btn tiny" id="btn-manual-check" type="button">Validate group</button>
+          <button class="btn tiny ghost" id="btn-manual-clear" type="button">Clear selection</button>
+        </div>
+        <div class="kmap-scroll">
+          <div id="kmap" class="kmap"></div>
+        </div>
+      </section>
+
+      <!-- ============ RESULT ============ -->
+      <section class="card" aria-label="Simplified result">
+        <div class="card-head">
+          <h2>Simplified result</h2>
+          <div class="copy-row">
+            <button class="btn tiny" data-copy="expression" type="button">Copy expression</button>
+            <button class="btn tiny" data-copy="truth" type="button">Copy truth table</button>
+            <button class="btn tiny" data-copy="minterms" type="button">Copy minterms</button>
+          </div>
+        </div>
+        <p class="original" id="original-fn">F(A,B,C,D) = Σm()</p>
+        <p class="result" id="result-expression">F = 0</p>
+        <div class="stats" id="stats"></div>
+        <div class="groups" id="groups"></div>
+      </section>
+
+      <!-- ============ EXPLANATION ============ -->
+      <section class="card" aria-label="Explanation">
+        <div class="card-head"><h2>How the simplification worked</h2></div>
+        <div id="steps" class="steps"></div>
+      </section>
+
+      <!-- ============ QUIZ ============ -->
+      <section class="card" aria-label="Practice mode">
+        <div class="card-head">
+          <h2>Practice mode</h2>
+          <div class="segmented small" id="quiz-difficulty">
+            <button class="seg is-active" data-difficulty="easy" type="button">Easy</button>
+            <button class="seg" data-difficulty="medium" type="button">Medium</button>
+            <button class="seg" data-difficulty="hard" type="button">Hard</button>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="btn-quiz-new" type="button">New question</button>
+          <button class="btn ghost" id="btn-quiz-load" type="button">Load into map</button>
+        </div>
+        <p class="quiz-question" id="quiz-question">Press “New question” to get a random K-map problem.</p>
+        <div class="row">
+          <div class="field">
+            <label for="quiz-answer">Your simplified expression</label>
+            <input id="quiz-answer" type="text" placeholder="e.g. B'D' + BD" autocomplete="off" />
+          </div>
+          <div class="field bottom">
+            <button class="btn primary" id="btn-quiz-check" type="button">Check answer</button>
+          </div>
+        </div>
+        <p class="quiz-feedback" id="quiz-feedback"></p>
+      </section>
+    </main>
+
+    <footer>
+      Built as a student project for digital-electronics practice. All minimisation runs locally with
+      Quine-McCluskey — no server, no API.
+    </footer>
+
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+
+    <script src="parser.js"></script>
+    <script src="simplifier.js"></script>
+    <script src="kmap.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
