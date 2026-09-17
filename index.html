@@ -175,5 +175,66 @@
     <script src="simplifier.js"></script>
     <script src="kmap.js"></script>
     <script src="app.js"></script>
+
+    <!-- Number System Converter -->
+<section class="number-converter">
+    <div class="converter-header">
+        <h2>Number System Converter</h2>
+        <p>Convert between Binary, Decimal, Octal and Hexadecimal.</p>
+    </div>
+
+    <div class="converter-inputs">
+
+        <div class="converter-field">
+            <label for="numberInput">Enter Number</label>
+            <input
+                type="text"
+                id="numberInput"
+                placeholder="Enter a number"
+                autocomplete="off"
+            >
+        </div>
+
+        <div class="converter-field">
+            <label for="fromBase">From</label>
+            <select id="fromBase">
+                <option value="2">Binary</option>
+                <option value="10" selected>Decimal</option>
+                <option value="8">Octal</option>
+                <option value="16">Hexadecimal</option>
+            </select>
+        </div>
+
+        <div class="converter-arrow">
+            →
+        </div>
+
+        <div class="converter-field">
+            <label for="toBase">To</label>
+            <select id="toBase">
+                <option value="2">Binary</option>
+                <option value="10">Decimal</option>
+                <option value="8">Octal</option>
+                <option value="16" selected>Hexadecimal</option>
+            </select>
+        </div>
+
+    </div>
+
+    <button id="convertButton" class="convert-button">
+        Convert
+    </button>
+
+    <div class="converter-result">
+        <label>Result</label>
+        <div id="conversionResult">—</div>
+    </div>
+
+    <button id="copyResultButton" class="copy-result-button">
+        Copy Result
+    </button>
+
+    <p id="conversionError" class="conversion-error"></p>
+</section>
   </body>
 </html>
