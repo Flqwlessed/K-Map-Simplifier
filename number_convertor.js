@@ -21,6 +21,26 @@ function convertNumber(value, fromBase, toBase) {
     }
 
     // Convert input to decimal first
+
+    document.getElementById("convertButton").addEventListener("click", function () {
+    const input = document.getElementById("numberInput").value;
+    const fromBase = parseInt(document.getElementById("fromBase").value);
+    const toBase = parseInt(document.getElementById("toBase").value);
+
+    const resultElement = document.getElementById("conversionResult");
+    const errorElement = document.getElementById("conversionError");
+
+    try {
+        const result = convertNumber(input, fromBase, toBase);
+
+        resultElement.textContent = result;
+        errorElement.textContent = "";
+
+    } catch (error) {
+        resultElement.textContent = "—";
+        errorElement.textContent = error.message;
+    }
+});
     const decimalValue = parseInt(value, fromBase);
 
     // Convert decimal value to target base
