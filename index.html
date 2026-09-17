@@ -162,6 +162,79 @@
         </div>
         <p class="quiz-feedback" id="quiz-feedback"></p>
       </section>
+
+            <!-- ============ NUMBER SYSTEM CONVERTER ============ -->
+      <section class="card converter-card" aria-label="Number System Converter">
+        <div class="card-head">
+          <h2>Number System Converter</h2>
+          <span class="fn-signature">BASE(2, 8, 10, 16)</span>
+        </div>
+
+        <p class="tagline converter-tagline">
+          Convert between Binary, Decimal, Octal and Hexadecimal with instant verification.
+        </p>
+
+        <div class="converter-grid">
+          <!-- Number Input -->
+          <div class="field number-field">
+            <label for="numberInput">Enter Number</label>
+            <input
+              type="text"
+              id="numberInput"
+              placeholder="e.g. 1010, 255, 77, FF"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+
+          <!-- From Dropdown -->
+          <div class="field base-field">
+            <label for="fromBase">From</label>
+            <div class="select-wrap">
+              <select id="fromBase">
+                <option value="2">Binary (2)</option>
+                <option value="10" selected>Decimal (10)</option>
+                <option value="8">Octal (8)</option>
+                <option value="16">Hexadecimal (16)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Arrow Divider -->
+          <div class="arrow-wrap" aria-hidden="true">
+            <span>→</span>
+          </div>
+
+          <!-- To Dropdown -->
+          <div class="field base-field">
+            <label for="toBase">To</label>
+            <div class="select-wrap">
+              <select id="toBase">
+                <option value="2">Binary (2)</option>
+                <option value="10">Decimal (10)</option>
+                <option value="8">Octal (8)</option>
+                <option value="16" selected>Hexadecimal (16)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Convert Button -->
+          <div class="field action-field">
+            <label>&nbsp;</label>
+            <button id="convertButton" class="btn primary" type="button">Convert</button>
+          </div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="converter-result-panel">
+          <div class="result-header">
+            <label>Result</label>
+            <button id="copyResultButton" class="btn tiny ghost" type="button">Copy Result</button>
+          </div>
+          <div id="conversionResult" class="converter-result-value">—</div>
+          <p id="conversionError" class="conversion-error"></p>
+        </div>
+      </section>
     </main>
 
     <footer>
@@ -175,5 +248,67 @@
     <script src="simplifier.js"></script>
     <script src="kmap.js"></script>
     <script src="app.js"></script>
+    <script src="number_convertor.js"></script>
+
+    <!-- Number System Converter -->
+<section class="number-converter">
+    <div class="converter-header">
+        <h2>Number System Converter</h2>
+        <p>Convert between Binary, Decimal, Octal and Hexadecimal.</p>
+    </div>
+
+    <div class="converter-inputs">
+
+        <div class="converter-field">
+            <label for="numberInput">Enter Number</label>
+            <input
+                type="text"
+                id="numberInput"
+                placeholder="Enter a number"
+                autocomplete="off"
+            >
+        </div>
+
+        <div class="converter-field">
+            <label for="fromBase">From</label>
+            <select id="fromBase">
+                <option value="2">Binary</option>
+                <option value="10" selected>Decimal</option>
+                <option value="8">Octal</option>
+                <option value="16">Hexadecimal</option>
+            </select>
+        </div>
+
+        <div class="converter-arrow">
+            →
+        </div>
+
+        <div class="converter-field">
+            <label for="toBase">To</label>
+            <select id="toBase">
+                <option value="2">Binary</option>
+                <option value="10">Decimal</option>
+                <option value="8">Octal</option>
+                <option value="16" selected>Hexadecimal</option>
+            </select>
+        </div>
+
+    </div>
+
+    <button id="convertButton" class="convert-button">
+        Convert
+    </button>
+
+    <div class="converter-result">
+        <label>Result</label>
+        <div id="conversionResult">—</div>
+    </div>
+
+    <button id="copyResultButton" class="copy-result-button">
+        Copy Result
+    </button>
+
+    <p id="conversionError" class="conversion-error"></p>
+</section>
   </body>
 </html>
